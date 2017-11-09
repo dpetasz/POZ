@@ -1,0 +1,223 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PrzychodniaZOZModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Badanie">
+    <Key>
+      <PropertyRef Name="IdBadanie" />
+    </Key>
+    <Property Name="IdBadanie" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nazwa" Type="varchar" MaxLength="15" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Lekarz">
+    <Key>
+      <PropertyRef Name="IdLekarz" />
+    </Key>
+    <Property Name="IdLekarz" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nazwisko" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Imie" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Adres" Type="nvarchar" MaxLength="50" />
+    <Property Name="Telefon" Type="nvarchar" MaxLength="15" />
+    <Property Name="Email" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'PrzychodniaZOZ.dbo.LekSpec' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="LekSpec">
+    <Key>
+      <PropertyRef Name="idlekarz" />
+      <PropertyRef Name="idspecjalizacja" />
+    </Key>
+    <Property Name="idlekarz" Type="int" Nullable="false" />
+    <Property Name="idspecjalizacja" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Pacjent">
+    <Key>
+      <PropertyRef Name="IdPacjent" />
+    </Key>
+    <Property Name="IdPacjent" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nazwisko" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Imie" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Adres" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Telefon" Type="nvarchar" MaxLength="15" />
+    <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Pesel" Type="nvarchar" MaxLength="11" Nullable="false" />
+    <Property Name="Login" Type="nvarchar" MaxLength="15" />
+    <Property Name="Haslo" Type="nvarchar" MaxLength="15" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Pracownik">
+    <Key>
+      <PropertyRef Name="IdPracownik" />
+    </Key>
+    <Property Name="IdPracownik" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nazwisko" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Imie" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="login" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="haslo" Type="varchar" MaxLength="15" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Specjalizacja">
+    <Key>
+      <PropertyRef Name="IdSpecjalizacja" />
+    </Key>
+    <Property Name="IdSpecjalizacja" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nazwa" Type="char" MaxLength="30" Nullable="false" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="WizytaBadanie">
+    <Key>
+      <PropertyRef Name="IdWizytaBadanie" />
+    </Key>
+    <Property Name="IdWizytaBadanie" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IdBadanie" Type="int" Nullable="false" />
+    <Property Name="IdPacjent" Type="int" />
+    <Property Name="DataBadanie" Type="date" Nullable="false" />
+    <Property Name="GodzinaBadanie" Type="time" Precision="0" Nullable="false" />
+    <Property Name="Status" Type="bit" />
+  </EntityType>
+  <EntityType Name="WizytaLekarz">
+    <Key>
+      <PropertyRef Name="IdWizytaLekarz" />
+    </Key>
+    <Property Name="IdWizytaLekarz" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IdLekarz" Type="int" Nullable="false" />
+    <Property Name="IdPacjent" Type="int" />
+    <Property Name="IdSpecjalizacja" Type="int" Nullable="false" />
+    <Property Name="DataWizyty" Type="date" Nullable="false" />
+    <Property Name="GodzinaWizyty" Type="time" Precision="0" Nullable="false" />
+    <Property Name="Status" Type="bit" />
+  </EntityType>
+  <Association Name="FK_LekSpec_Lekarz">
+    <End Role="Lekarz" Type="Self.Lekarz" Multiplicity="1" />
+    <End Role="LekSpec" Type="Self.LekSpec" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Lekarz">
+        <PropertyRef Name="IdLekarz" />
+      </Principal>
+      <Dependent Role="LekSpec">
+        <PropertyRef Name="idlekarz" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LekSpec_Specjalizacja">
+    <End Role="Specjalizacja" Type="Self.Specjalizacja" Multiplicity="1" />
+    <End Role="LekSpec" Type="Self.LekSpec" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Specjalizacja">
+        <PropertyRef Name="IdSpecjalizacja" />
+      </Principal>
+      <Dependent Role="LekSpec">
+        <PropertyRef Name="idspecjalizacja" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_WizytaBadanie_Badanie">
+    <End Role="Badanie" Type="Self.Badanie" Multiplicity="1" />
+    <End Role="WizytaBadanie" Type="Self.WizytaBadanie" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Badanie">
+        <PropertyRef Name="IdBadanie" />
+      </Principal>
+      <Dependent Role="WizytaBadanie">
+        <PropertyRef Name="IdBadanie" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_WizytaBadanie_Pacjent">
+    <End Role="Pacjent" Type="Self.Pacjent" Multiplicity="0..1" />
+    <End Role="WizytaBadanie" Type="Self.WizytaBadanie" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pacjent">
+        <PropertyRef Name="IdPacjent" />
+      </Principal>
+      <Dependent Role="WizytaBadanie">
+        <PropertyRef Name="IdPacjent" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_WizytaLekarz_Lekarz">
+    <End Role="Lekarz" Type="Self.Lekarz" Multiplicity="1" />
+    <End Role="WizytaLekarz" Type="Self.WizytaLekarz" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Lekarz">
+        <PropertyRef Name="IdLekarz" />
+      </Principal>
+      <Dependent Role="WizytaLekarz">
+        <PropertyRef Name="IdLekarz" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_WizytaLekarz_Pacjent">
+    <End Role="Pacjent" Type="Self.Pacjent" Multiplicity="0..1" />
+    <End Role="WizytaLekarz" Type="Self.WizytaLekarz" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pacjent">
+        <PropertyRef Name="IdPacjent" />
+      </Principal>
+      <Dependent Role="WizytaLekarz">
+        <PropertyRef Name="IdPacjent" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_WizytaLekarz_Specjalizacja">
+    <End Role="Specjalizacja" Type="Self.Specjalizacja" Multiplicity="1" />
+    <End Role="WizytaLekarz" Type="Self.WizytaLekarz" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Specjalizacja">
+        <PropertyRef Name="IdSpecjalizacja" />
+      </Principal>
+      <Dependent Role="WizytaLekarz">
+        <PropertyRef Name="IdSpecjalizacja" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="PrzychodniaZOZModelStoreContainer">
+    <EntitySet Name="Badanie" EntityType="Self.Badanie" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Lekarz" EntityType="Self.Lekarz" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Pacjent" EntityType="Self.Pacjent" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Pracownik" EntityType="Self.Pracownik" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Specjalizacja" EntityType="Self.Specjalizacja" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="WizytaBadanie" EntityType="Self.WizytaBadanie" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="WizytaLekarz" EntityType="Self.WizytaLekarz" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LekSpec" EntityType="Self.LekSpec" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [LekSpec].[idlekarz] AS [idlekarz], 
+    [LekSpec].[idspecjalizacja] AS [idspecjalizacja]
+    FROM [dbo].[LekSpec] AS [LekSpec]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK_LekSpec_Lekarz" Association="Self.FK_LekSpec_Lekarz">
+      <End Role="Lekarz" EntitySet="Lekarz" />
+      <End Role="LekSpec" EntitySet="LekSpec" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LekSpec_Specjalizacja" Association="Self.FK_LekSpec_Specjalizacja">
+      <End Role="Specjalizacja" EntitySet="Specjalizacja" />
+      <End Role="LekSpec" EntitySet="LekSpec" />
+    </AssociationSet>
+    <AssociationSet Name="FK_WizytaBadanie_Badanie" Association="Self.FK_WizytaBadanie_Badanie">
+      <End Role="Badanie" EntitySet="Badanie" />
+      <End Role="WizytaBadanie" EntitySet="WizytaBadanie" />
+    </AssociationSet>
+    <AssociationSet Name="FK_WizytaBadanie_Pacjent" Association="Self.FK_WizytaBadanie_Pacjent">
+      <End Role="Pacjent" EntitySet="Pacjent" />
+      <End Role="WizytaBadanie" EntitySet="WizytaBadanie" />
+    </AssociationSet>
+    <AssociationSet Name="FK_WizytaLekarz_Lekarz" Association="Self.FK_WizytaLekarz_Lekarz">
+      <End Role="Lekarz" EntitySet="Lekarz" />
+      <End Role="WizytaLekarz" EntitySet="WizytaLekarz" />
+    </AssociationSet>
+    <AssociationSet Name="FK_WizytaLekarz_Pacjent" Association="Self.FK_WizytaLekarz_Pacjent">
+      <End Role="Pacjent" EntitySet="Pacjent" />
+      <End Role="WizytaLekarz" EntitySet="WizytaLekarz" />
+    </AssociationSet>
+    <AssociationSet Name="FK_WizytaLekarz_Specjalizacja" Association="Self.FK_WizytaLekarz_Specjalizacja">
+      <End Role="Specjalizacja" EntitySet="Specjalizacja" />
+      <End Role="WizytaLekarz" EntitySet="WizytaLekarz" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
